@@ -101,11 +101,11 @@ class HomeScreenState extends State<HomeScreen> {
         // Uri.parse('http://localhost:3000/api/devices/addDevice'),
         Uri.parse(
             'https://capstone-smartspeaker.onrender.com/api/devices/addDevice'),
+
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "userID": userId,
-          "deviceID": id,
-        }),
+
+        body:
+            jsonEncode({"userID": userId, "deviceID": id, "deviceName": name}),
       );
 
       if (!mounted) return;
@@ -114,6 +114,7 @@ class HomeScreenState extends State<HomeScreen> {
         setState(() {
           devices.add({"adaFruitID": id});
         });
+        await _fetchDevices();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Thiết bị được thêm thành công')),
         );
@@ -147,6 +148,14 @@ class HomeScreenState extends State<HomeScreen> {
                 controller: idController,
                 decoration: const InputDecoration(
                   labelText: 'ID thiết bị',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Tên thiết bị',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -377,21 +386,23 @@ class HomeScreenState extends State<HomeScreen> {
                                 IconData icon = Icons.device_unknown;
                                 Color color = Colors.grey;
 
-                                if (device['deviceType'].contains('light')) {
+                                if (device['deviceType'] != null &&
+                                    device['deviceType'].contains('light')) {
                                   title = 'Đèn';
                                   icon = Icons.lightbulb_outline;
                                   color = Colors.amber;
-                                } else if (device['deviceType']
-                                    .contains('fan')) {
+                                } else if (device['deviceType'] != null &&
+                                    device['deviceType'].contains('fan')) {
                                   title = 'Quạt';
                                   icon = Icons.wind_power;
                                   color = Colors.blue;
-                                } else if (device['deviceType'] == 'sensor') {
+                                } else if (device['deviceType'] != null &&
+                                    device['deviceType'] == 'sensor') {
                                   title = 'Cảm biến';
                                   icon = Icons.wifi_outlined;
                                   color = Colors.purple;
-                                } else if (device['deviceType'] ==
-                                    'air_condition') {
+                                } else if (device['deviceType'] != null &&
+                                    device['deviceType'] == 'air_condition') {
                                   title = 'Máy lạnh';
                                   icon = Icons.air_outlined;
                                   color = Colors.teal;

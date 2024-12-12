@@ -103,10 +103,8 @@ class KitchenScreenState extends State<KitchenScreen> {
         Uri.parse(
             'https://capstone-smartspeaker.onrender.com/api/devices/addDevice'),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "userID": userId,
-          "deviceID": id,
-        }),
+        body:
+            jsonEncode({"userID": userId, "deviceID": id, "deviceName": name}),
       );
 
       if (!mounted) return;
@@ -115,6 +113,7 @@ class KitchenScreenState extends State<KitchenScreen> {
         setState(() {
           devices.add({"adaFruitID": id});
         });
+        await _fetchDevices();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Thiết bị được thêm thành công')),
         );
@@ -148,6 +147,14 @@ class KitchenScreenState extends State<KitchenScreen> {
                 controller: idController,
                 decoration: const InputDecoration(
                   labelText: 'ID thiết bị',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Tên thiết bị',
                   border: OutlineInputBorder(),
                 ),
               ),
